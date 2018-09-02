@@ -1,0 +1,29 @@
+body{ margin:0; background-color:#f4f3f4;width:100%;}
+header{ height:0.78999342rem; background-color:#484848; padding-left:0.355497rem; padding-right:0.69782752rem; position:relative;display:flex; align-items:center;justify-content:space-between; margin-bottom: 0.856rem; width:100%; }
+#img1{width:0.31599737rem; height:0.236998rem; position:absolute; top:0.26333114rem; left:0.355497rem;}
+#ul1{height:0.78999342rem; margin-left:2.95rem; display:flex; align-items:center ;line-height:0.78999342rem; margin-right:4.61rem;}
+#ul1 li{  width:1.83rem;line-height:0.78999342rem; text-align:center; margin:0; height:0.78999342rem; display:flex; align-items:center; justify-content:center;}
+#ul1 li a{ font-size:0.22383147rem; color:#ffffff;}
+header div{ width:2.18564845rem;display:flex; align-items:center; justify-content:space-between; float:right;}
+header div p{font-size:0.22383147rem; color:#ffffff;}
+header div img:nth-of-type(1){ width:0.236998rem; height:0.19749835rem;}
+header div img:nth-of-type(2){ width:0.236998rem; height:0.22383147rem;}
+header div img:nth-of-type(3){ width:0.1185rem; height:0.105rem;}
+header div{ width:2.18564845rem; display:flex; align-items:center; justify-content:space-between; float:right;}
+.content{ width: 13.4167215rem; height: 10.8rem; margin: 0 auto; background-color: #FFFFFF; border:0.26333114rem; border-radius: 0.3rem; padding: 0.7rem; margin-bottom: 1rem;}
+.c1{ margin-bottom: 0.6rem ; border-bottom:0.04rem #ABB4BC solid; height: 0.79rem;}
+#cp1{ font-size: 0.40rem; color: #abb4bc; float: left; width: 2.7rem; line-height: 0.5rem; border-right:0.03rem #ABB4BC solid ;background-color: #ECEFF1;}
+#cp2{ font-size: 0.40rem; color: #abb4bc; float: left; width: 2.7rem; line-height: 0.5rem; margin-left: 0.28rem; }
+.c1 input{ float: right;}
+.c1 input:nth-of-type(1){ margin-left: 0.1rem; width: 1rem; height: 0.5rem;}
+.c1 input:nth-of-type(2){ width: 2.5rem; height: 0.5rem;}
+.c2{ overflow: auto; height: 8rem;}
+table{ border-collapse:collapse; width:10rem;  border:0.014rem #000000 solid; cellspacing:0; margin: 0 auto;}
+td{ height:0.73rem; width: 2.5rem; border:0.014rem #999c9f dashed; font-size: 0.25rem; text-align: center; line-height:0.73rem ;}
+.t1{ background-color: #c6ccd1;}
+/*.t2{ background-color: #eceff1;}*/
+tr:nth-of-type(2n){background-color:#eceff1;}
+td input{ width: 1.5rem; height: 0.4rem;}
+#ul2{ width: 1.5rem; height: 1rem; position: absolute; top:0.80rem; right: 0.5rem; z-index: 2; background-color: #FFFFFF; border: 0.0132rem #000000 solid; border-radius: 0.132rem; display: none;}
+#ul2 li{ height: 0.5rem; text-align: center; line-height: 0.5rem;}
+.h1{ width: 1.6rem ; height: 0.04rem; position: absolute; top:0.76rem; left: 7.1rem; background-color: #FFFFFF; z-index: 2;}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--映射器   namespace:用于绑定Dao接口即IDao,绑定后就可以不用写接口实现类，mybatis会通过绑定自动帮你找到对应要执行的sql语句-->
+<mapper namespace="com.classroom.dao.IDatasDao">
+
+    <!--通过班级id查询班级内的所有资料-->
+    <select id="DownloadAllDatas" parameterType="int" resultType="com.classroom.entity.Datas">
+        select D.datas_id,D.datas_name,D.datas_type,D.teacher_number from datas D where D.classroom_id=#{classroomId}
+    </select>
+    <select id="DownloadAllDatas1" parameterType="int" resultType="com.classroom.entity.Datas">
+        select D.datas_id,D.datas_name,D.datas_type,D.teacher_number from datas D where D.classroom_id=#{classroomId}
+    </select>
+    <!--通过资料名称模糊查询资料-->
+    <select id="DownloadDatasByName" resultType="com.classroom.entity.Datas">
+        select D.datas_id,D.datas_name,D.datas_type,D.teacher_number from datas D where D.datas_name like #{0} and D.classroom_id=#{1}
+    </select>
+    <select id="DownloadDatasByName1" resultType="com.classroom.entity.Datas">
+        select D.datas_id,D.datas_name,D.datas_type,D.teacher_number from datas D where D.datas_name like #{0} and D.classroom_id=#{1}
+    </select>
+    <!--通过资料类型模糊查询资料-->
+    <select id="DownloadDatasByType" resultType="com.classroom.entity.Datas">
+        select D.datas_id,D.datas_name,D.datas_type,D.teacher_number from datas D where D.datas_type=#{0} and D.classroom_id=#{1}
+    </select>
+    <select id="DownloadDatasByType1" resultType="com.classroom.entity.Datas">
+        select D.datas_id,D.datas_name,D.datas_type,D.teacher_number from datas D where D.datas_type=#{0} and D.classroom_id=#{1}
+    </select>
+    <!--通过老师账号模糊查询资料-->
+    <select id="DownloadDatasByNumber" resultType="com.classroom.entity.Datas">
+        select D.datas_id,D.datas_name,D.datas_type,D.teacher_number from datas D where D.teacher_number=#{0} and D.classroom_id=#{1}
+    </select>
+    <select id="DownloadDatasByNumber1" resultType="com.classroom.entity.Datas">
+        select D.datas_id,D.datas_name,D.datas_type,D.teacher_number from datas D where D.teacher_number=#{0} and D.classroom_id=#{1}
+    </select>
+    <!--通过资料名称查询资料存储路径-->
+    <select id="DownloadDatas" parameterType="String" resultType="String">
+        select D.datas_path from datas D where D.datas_name=#{datasName}
+    </select>
+
+    <insert id="insertDatas" parameterType="com.classroom.entity.Datas">
+        INSERT INTO datas
+        (teacher_number,datas_gener,classroom_id,datas_name,datas_type,datas_path)
+        VALUES
+        (#{teacherNumber},#{datasGener},#{classroomId},#{datasName},#{datasType},#{datasPath})
+    </insert>
+
+    <delete id="deleteDatas" parameterType="String">
+        UPDATE datas SET deleted=1 where datas_name=#{datasName}
+    </delete>
+
+
+</mapper>
+
+

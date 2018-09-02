@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.classroom.dao.IStudentDao">
+
+    <insert id="register" parameterType="com.classroom.entity.Student">
+      INSERT INTO student(student_id,student_name,student_no,student_number,student_sex,student_pwd,school_name,student_photo)
+                  VALUES (DEFAULT ,#{studentName},#{studentNo},#{studentNumber},#{studentSex},#{studentPwd},#{schoolName},#{studentPhoto})
+
+    </insert>
+
+    <select id="checkShortMessage" parameterType="java.lang.String" resultType="com.classroom.vo.response.People">
+     SELECT  student_name  name,student_no no,student_pwd password,school_name schoolName
+          FROM  student WHERE student_number=#{studentNumber}  AND deleted="0"
+
+    </select>
+
+    <update id="update" >
+        UPDATE student SET student_Name=#{studentName},student_no=#{studentNo},school_name=#{schoolName}WHERE student_number=#{studentNumber} AND deleted ="0"
+    </update>
+
+    <update id="updatePwd" >
+        UPDATE student SET student_pwd=#{studentPwd} WHERE student_number=#{studentNumber} AND deleted ="0"
+    </update>
+
+
+    <insert id="agreeJoin">
+        insert  into  class_student (class_student_id,classroom_id,student_id)values (default,#{classroom_id},#{student_id})
+    </insert>
+
+    <select id="searchStudentId" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT student_id FROM student  WHERE student_number=#{student_number}
+    </select>
+
+    <select id="selectByName" resultType="com.classroom.vo.response.SearchStudentResult" >
+        SELECT S.student_name,S.student_no,S.student_sex,C.classroom_name FROM class_student SC INNER JOIN
+        student S INNER JOIN classroom C ON S.student_id=SC.student_id AND C.classroom_id=SC.classroom_id
+        WHERE S.student_name=#{student_name} AND C.classroom_id=#{classroom_id}
+    </select>
+    <select id="selectByNo" resultType="com.classroom.vo.response.SearchStudentResult">
+        SELECT S.student_name,S.student_no,S.student_sex,C.classroom_name FROM class_student SC INNER JOIN
+        student S INNER JOIN classroom C ON S.student_id=SC.student_id AND C.classroom_id=SC.classroom_id
+        WHERE S.student_no=#{student_no} AND C.classroom_id=#{classroom_id}
+    </select>
+
+
+    <delete id="deleteStudent" >
+        delete  from  class_student  where classroom_id=#{classroom_id} and student_id in
+        <foreach collection="student_id" item="sid" separator="," open="(" close=")">
+            #{sid}
+        </foreach>
+    </delete>
+
+    <select id="loadAllStudent" parameterType="java.lang.Integer" resultType="com.classroom.vo.response.SearchStudentResult">
+        SELECT S.student_name,S.student_no,S.student_sex,C.classroom_name FROM class_student SC INNER JOIN
+        student S INNER JOIN classroom C ON S.student_id=SC.student_id AND C.classroom_id=SC.classroom_id
+        WHERE C.classroom_id=#{classroom_id}
+    </select>
+
+    <select  id="countStudent" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(student_id)  from  class_student where classroom_id=#{classroom_id}
+    </select>
+
+    <select id="searchStudentIdByNo" parameterType="java.util.List" resultType="java.lang.String">
+        select student_id  from  student where student_no in
+        <foreach collection="list" item="sno" separator="," open="(" close=")">
+            #{sno}
+        </foreach>
+    </select>
+</mapper>

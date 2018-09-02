@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.classroom.dao.IStudentEvaluationDao">
+    <select id="showEvaluation" resultType="com.classroom.vo.response.Evaluation" parameterType="java.lang.Integer">
+        SELECT total_attendance_count,total_sum,homework_count,homework_sum,total_score FROM evaluation WHERE classroom_id=#{classroom_id}
+    </select>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.classroom.dao.ICheckingDao">
+    <!-- 根据班级id查询该班级所有学生-->
+    <select id="loadAllStudent" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT student_number FROM student WHERE  student_id IN (SELECT student_id FROM class_student where classroom_id=#{classroomId})
+    </select>
+
+    <!-- 查询表check_one是否为空-->
+    <select id="selectCheckOne" resultType="java.lang.Integer">
+        SELECT  count(*) FROM check_one
+    </select>
+
+    <!-- 建立学生签到详情的表数据-->
+    <insert id="insertOneStudent" parameterType="com.classroom.entity.CheckOne">
+        INSERT INTO  check_one (check_id,student_number,flag,classroom_id,mark) VALUES
+        <foreach collection="list" item="c" separator=",">
+            (default,#{c.studentNumber},'0',#{c.classroomId},#{c.mark})
+        </foreach>
+    </insert>
+
+
+    <!--建立该学生的第一次签到-->
+   <insert id="insertFirstStudent" parameterType="com.classroom.entity.Evaluation">
+        INSERT INTO  evaluation VALUES
+            <foreach collection="list" item="e" separator=",">
+                (default,#{e.studentNumber},0,#{e.totalSum},#{e.classroomId})
+            </foreach>
+    </insert>
+
+    <!-- 根据student_number查询classroom_id(可能查询出多个，因为一个血红色呢个可以加入多个班级)-->
+    <select id="select" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT classroom_id FROM class_student WHERE student_id=(select student_id FROM student WHERE student_number=#{studentNumber})
+    </select>
+
+    <!-- 查询最大mark  目前签到的次数-->
+    <select id="selectMaxMark" resultType="java.lang.Integer" parameterType="com.classroom.entity.CheckOne">
+        SELECT MAX(mark) FROM check_one WHERE student_number=#{studentNumber} AND classroom_id=#{classroomId}
+    </select>
+
+    <!-- 更新学生签到的表-->
+    <update id="updateCheckOne" parameterType="com.classroom.entity.CheckOne"  >
+        UPDATE check_one SET flag=1 WHERE
+        <foreach collection="list" item="e" separator=",">
+        student_number=#{e.studentNumber} AND classroom_id=#{e.classroomId} AND mark=#{e.mark}
+    </foreach>
+    </update>
+
+    <!-- 查询当前上一次签到数据-->
+    <select id="selectEvaluation" parameterType="com.classroom.entity.Evaluation" resultType="java.lang.Integer">
+        SELECT * from evaluation WHERE student_number=#{studentNumber} AND classroom_id=#{classroomId}
+    </select>
+
+    <!-- 跟新evaluation表-->
+    <update id="updateEvaluation"  parameterType="com.classroom.entity.Evaluation">
+
+        UPDATE evaluation SET total_attendance_count=#{totalAttendanceCount} WHERE
+        <foreach collection="list" item="e" separator=",">
+            student_number=#{e.studentNumber} AND classroom_id=#{e.classroomId}
+        </foreach>
+    </update>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--查询学生签到总次数-->
+    <select id="selectTotalCount" parameterType="int" resultType="int">
+        SELECT total_attendance_count FROM evaluation WHERE student_id=#{student_id}
+    </select>
+    <!-- 更新学生签到次数-->
+    <update id="addTotalCount" parameterType="list" >
+        UPDATE  evalution SET total_attendance_count=#{total_attendance_count} WHERE student_id=#{student_id}
+    </update>
+
+
+</mapper>

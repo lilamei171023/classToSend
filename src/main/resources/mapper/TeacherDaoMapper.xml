@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.classroom.dao.ITeacherDao">
+
+    <insert id="register" parameterType="com.classroom.entity.Teacher">
+      INSERT INTO teacher(teacher_id,teacher_name,teacher_no,teacher_number,teacher_sex,teacher_pwd,school_name,teacher_photo)
+                  VALUES (DEFAULT ,#{teacherName},#{teacherNo},#{teacherNumber},#{teacherSex},#{teacherPwd},#{schoolName},#{teacherPhoto})
+
+    </insert>
+
+    <select id="checkShortMessage" parameterType="java.lang.String" resultType="com.classroom.vo.response.People">
+     SELECT  teacher_name  name,teacher_no no,teacher_pwd password,school_name schoolName
+          FROM  teacher WHERE teacher_number=#{teacherNumber}  AND deleted="0"
+
+    </select>
+
+    <update id="update">
+        UPDATE teacher SET teacher_Name=#{teacherName},teacher_no=#{teacherNo},school_name=#{schoolName} WHERE teacher_number=#{teacherNumber} AND deleted="0"
+    </update>
+
+    <update id="updatePwd" parameterType="com.classroom.entity.Teacher">
+        UPDATE teacher SET teacher_pwd=#{teacherPwd} WHERE teacher_number=#{teacherNumber} AND deleted ="0"
+    </update>
+
+
+
+
+    <insert id="teacherJion" >
+        insert  into  class_teacher (class_teacher_id,classroom_id,teacher_id)values (default,#{classroom_id},#{teacher_id})
+    </insert>
+    <select id="searchTeacherName"  parameterType="java.lang.Integer" resultType="java.lang.String">
+        select  T.teacher_name  from  class_teacher CT  INNER JOIN
+        teacher T  INNER JOIN  classroom C  ON  T.teacher_id=CT.teacher_id AND C.classroom_id=CT.classroom_id
+        WHERE  C.classroom_id=#{classroom_id}
+    </select>
+    <select id="searchTeacherId" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT teacher_id FROM teacher WHERE teacher_number=#{teacher_number}
+    </select>
+
+    <select id="checkClassroom"  parameterType="java.lang.String" resultType="java.lang.String">
+        select  C.classroom_name  from  class_teacher CT  INNER JOIN
+        teacher T  INNER JOIN  classroom C  ON  T.teacher_id=CT.teacher_id AND C.classroom_id=CT.classroom_id
+        WHERE  T.teacher_number=#{teacher_number}
+    </select>
+
+</mapper>

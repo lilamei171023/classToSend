@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.classroom.dao.ITopicDao">
+
+<insert id="insertNewTopic"  useGeneratedKeys="true" keyProperty="topicId" >
+    INSERT INTO topic (topic_title,topic_content,userlogin_number) VALUES (#{topicTitle},#{topicContent},#{userLoginNumber})
+</insert>
+    <resultMap id="topicRelevant" type="com.classroom.vo.response.TopicRelevant">
+        <id property="topicId" column="topic_id"/>
+        <result property="topicTitle" column="topic_title"/>
+        <result property="topicContent" column="topic_content"/>
+        <result property="userLoginNumber" column="userlogin_number"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPhoto" column="user_photopath"/>
+        <result property="agreeCount" column="agree_count"/>
+        <result property="scanTimes" column="scan_times"/>
+        <result property="commentsTimes" column="comment_times"/>
+        <result property="createAt" column="create_at"/>
+
+    </resultMap>
+    <!--某用户发布的所有话题-->
+   <select id="selectUserTopic" resultMap="topicRelevant" >
+       SELECT * FROM (
+         SELECT topic_id,topic_title,topic_content ,agree_count,scan_times,comment_times,topic.create_at,userlogin.userlogin_number,
+            student_name AS user_name,student_photo AS user_photopath
+            FROM topic,student,userlogin WHERE topic.userlogin_number=student.student_number
+                                              AND student.student_number=userlogin.userlogin_number
+                                              AND userlogin.target='1'
+       UNION ALL
+         SELECT topic_id,topic_title,topic_content ,agree_count,scan_times,comment_times,topic.create_at,userlogin.userlogin_number,
+            teacher_name AS user_name,teacher_photo AS user_photopath
+            FROM topic,teacher,userlogin WHERE topic.userlogin_number=teacher.teacher_number
+                                              AND teacher.teacher_number=userlogin.userlogin_number
+                                              AND userlogin.target='0'
+       )AS a  WHERE userlogin_number=#{userLoginNumber}
+       ORDER BY (comment_times+scan_times+agree_count)DESC
+
+       <!-- SELECT topic_id,topic_title,topic_content,userlogin_number,agree_count,scan_times,comment_times,create_at FROM topic WHERE  userlogin_number=#{0}and topic_id=#{1}-->
+    </select>
+    <!--关键字查找-->
+    <select id="selectKeywordTopic" resultMap="topicRelevant">
+         SELECT * FROM (
+                 SELECT topic_id,topic_title,topic_content ,agree_count,scan_times,comment_times,topic.create_at,userlogin.userlogin_number,
+                    student_name AS user_name,student_photo AS user_photopath
+                    FROM topic,student,userlogin WHERE topic.userlogin_number=student.student_number
+                                                      AND student.student_number=userlogin.userlogin_number
+                                                      AND userlogin.target='1'
+               UNION ALL
+                 SELECT topic_id,topic_title,topic_content ,agree_count,scan_times,comment_times,topic.create_at,userlogin.userlogin_number,
+                    teacher_name AS user_name,teacher_photo AS user_photopath
+                    FROM topic,teacher,userlogin WHERE topic.userlogin_number=teacher.teacher_number
+                                                      AND teacher.teacher_number=userlogin.userlogin_number
+                                                      AND userlogin.target='0'
+               )AS a  WHERE topic_title LIKE CONCAT(CONCAT('%', #{keyword}), '%') OR topic_content LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+         ORDER BY (comment_times+scan_times+agree_count)DESC
+    </select>
+    <!--某班级学生发布的话题
+    <select id="selectOneClassTopic" resultMap="topic">
+        SELECT topic_id,topic_title,topic_content,userlogin_number,agree_count,scan_times,comment_times,create_at FROM topic t,student s class c WHERE t.
+    </select>-->
+    <select id="selectAllTopic" resultMap="topicRelevant">
+         SELECT * FROM (
+                 SELECT topic_id,topic_title,topic_content ,agree_count,scan_times,comment_times,topic.create_at,userlogin.userlogin_number,
+                    student_name AS user_name,student_photo AS user_photopath
+                    FROM topic,student,userlogin WHERE topic.userlogin_number=student.student_number
+                                                      AND student.student_number=userlogin.userlogin_number
+                                                      AND userlogin.target='1'
+               UNION ALL
+                 SELECT topic_id,topic_title,topic_content ,agree_count,scan_times,comment_times,topic.create_at,userlogin.userlogin_number,
+                    teacher_name AS user_name,teacher_photo AS user_photopath
+                    FROM topic,teacher,userlogin WHERE topic.userlogin_number=teacher.teacher_number
+                                                      AND teacher.teacher_number=userlogin.userlogin_number
+                                                      AND userlogin.target='0'
+          )AS a   ORDER BY (comment_times+scan_times+agree_count)DESC
+    </select>
+    <update id="agreeTopic" >
+        UPDATE topic SET agree_count=agree_count+1 WHERE topic_id=#{topicId}
+    </update>
+    <update id="commentsTimesAdd">
+        UPDATE topic set comment_times=comment_times+1 WHERE  topic_id=#{topicId}
+    </update>
+    <update id="scanTimes">
+        UPDATE topic SET scan_times=scan_times+1 WHERE  topic_id=#{topicId}
+    </update>
+    <update id="deletedTopic">
+        UPDATE topic t,comments cc SET t.deleted=1 ,cc.deleted=1 WHERE t.topic_id=#{topicId} or cc.topic_id=#{topicId}
+    </update>
+</mapper>
+

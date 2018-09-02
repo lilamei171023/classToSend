@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.classroom.dao.ICommentDao">
+    <insert id="insertNewComment" useGeneratedKeys="true" keyProperty="commentId">
+        INSERT INTO comments(content,topic_id,userlogin_number)VALUES (#{content},#{topicId},#{userLoginNumber})
+    </insert>
+    <resultMap id="CommentRelevant" type="com.classroom.vo.response.CommentRelevant">
+        <id property="commentsId" column="comments_id"/>
+        <result property="content" column="content "/>
+        <result property="agreeCount" column="agree_count"/>
+        <result property="createAt" column="create_at"/>
+        <result property="userLoginNumber" column="userlogin_number"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPhoto" column="user_photopath"/>
+        <result property="topicId" column="topic_id"/>
+    </resultMap>
+    <select id="selectCommentByTopicId" parameterType="java.lang.Integer" resultMap="CommentRelevant">
+        SELECT * FROM (
+            SELECT  comments_id ,content,agree_count,comments.create_at,comments.userlogin_number,topic_id,
+                student_name AS user_name,student.student_photo AS user_photopath
+                FROM comments,student,userlogin
+                    WHERE comments.userlogin_number=student.student_number
+                    AND student.student_number=userlogin.userlogin_number
+                    AND userlogin.target='1'
+         UNION ALL
+               SELECT comments_id ,content,agree_count,comments.create_at,comments.userlogin_number,topic_id,
+                teacher_name AS user_name,teacher.teacher_photo AS user_photopath
+                FROM comments,teacher,userlogin
+                    WHERE comments.userlogin_number=teacher.teacher_number
+                    AND teacher.teacher_number=userlogin.userlogin_number
+                    AND userlogin.target='0'
+        )AS b   WHERE topic_id=#{topicId}
+        ORDER BY (agree_count)DESC
+
+    </select>
+    <update id="deleteComment" >
+        UPDATE comments cc INNER JOIN topic t ON cc.topic_id=t.topic_id SET cc.deleted='1'
+            WHERE cc.comments_id =#{commentId}
+             AND (cc.userlogin_number=#{userLoginNumber} OR t.userlogin_number=#{userLoginNumber})
+   </update>
+    <update id="agreeComment" parameterType="int">
+        UPDATE comments SET agree_count=agree_count+1 WHERE comments_id=#{commentId}
+    </update>
+</mapper>

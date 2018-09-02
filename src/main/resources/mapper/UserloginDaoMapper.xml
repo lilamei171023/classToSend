@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 设置为IUserloginDao接口方法提供sql语句配置 -->
+<mapper namespace="com.classroom.dao.IUserloginDao">
+
+    <select id="checkLogin" resultType="int">
+       SELECT userlogin_id FROM userlogin WHERE userlogin_number = #{userloginNumber} AND userlogin_pwd=#{userloginPwd} AND deleted=0
+    </select>
+
+
+    <select id="getById" resultType="com.classroom.entity.Userlogin">
+        SELECT  * FROM  userlogin WHERE  userlogin_id=#{userloginId} AND deleted="0"
+    </select>
+
+    <select id="selectByUserloginName" resultType="com.classroom.entity.Userlogin">
+        SELECT  * FROM  userlogin WHERE  userlogin_number=#{userloginNumber} AND deleted="0"
+    </select>
+
+    <insert id="addUserlogin" parameterType="com.classroom.entity.Userlogin">
+        INSERT INTO userlogin(userlogin_id,userlogin_number,userlogin_pwd,target)
+                        VALUES (DEFAULT ,#{userloginNumber},#{userloginPwd},#{target})
+
+    </insert>
+
+    <update id="updatePwd" parameterType="com.classroom.entity.Userlogin">
+        UPDATE userlogin SET userlogin_pwd=#{userloginPwd} WHERE userlogin_number=#{userloginNumber} AND deleted ="0"
+    </update>
+
+    <select id="showMessage" resultType="com.classroom.vo.response.People">
+        SELECT  student_name  name,student_no no,student_pwd password,school_name schoolName
+          FROM  student WHERE student_number="100001"  AND deleted="0"
+    </select>
+
+
+
+
+</mapper>

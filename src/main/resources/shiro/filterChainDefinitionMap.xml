@@ -1,0 +1,9 @@
+
+
+<bean id="chainDefinitionSectionMetaSource" class="com.collection.shiro.ChainDefinitionSectionMetaSource">
+    <property name="filterChainDefinitions">
+        <value>
+            validateCode.shtml = anon
+        </value>
+    </property>
+</bean>

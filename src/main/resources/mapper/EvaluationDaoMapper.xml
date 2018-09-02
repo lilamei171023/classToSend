@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.classroom.dao.IEvaluationDao">
+    <update id="updateHomeworkSum" >
+        update evaluation set homework_sum=#{homeworkSum} WHERE classroom_id=#{classroomId}
+    </update>
+
+    <update id="updateHomeworkCount">
+        update evaluation set homework_count=#{homeworkCount} WHERE student_number=#{studentNumber}
+    </update>
+    <select id="selectHomeworkSum" resultType="int" parameterType="int">
+        SELECT homework_sum FROM evaluation WHERE classroom_id=#{classroomId} GROUP BY homework_sum
+    </select>
+    <select id="selectHomeworkCount" resultType="int" parameterType="String">
+        SELECT homework_count FROM evaluation WHERE student_number=#{studentNumber}
+    </select>
+</mapper>

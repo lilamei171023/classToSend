@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.classroom.dao.IHomeworkDao">
+
+    <!--通过班级id查询班级所有作业-->
+    <select id="DownloadAllHomework" parameterType="int" resultType="com.classroom.entity.Homework">
+        select H.homework_id,H.homework_name,H.homework_type,H.student_number from homework H where  H.classroom_id=#{classroomId}
+    </select>
+    <!--通过作业名称来查询-->
+    <select id="DownloadHomeworkByName" resultType="com.classroom.entity.Homework">
+        select H.homework_id,H.homework_name,H.homework_type,H.student_number from homework H where  H.homework_name=#{0} and H.classroom_id=#{1}
+    </select>
+    <!--通过作业类型来查询-->
+    <select id="DownloadHomeworkByType" resultType="com.classroom.entity.Homework">
+        select H.homework_id,H.homework_name,H.homework_type,H.student_number from homework H where  H.homework_type=#{0} and H.classroom_id=#{1}
+    </select>
+    <!--通过学生账号来查询-->
+    <select id="DownloadHomeworkByNumber" resultType="com.classroom.entity.Homework">
+        select H.homework_id,H.homework_name,H.homework_type,H.student_number from homework H where  H.student_number=#{0} and H.classroom_id=#{1}
+    </select>
+    <!--通过作业名称查询作业存储路径-->
+    <select id="DownloadHomework" parameterType="String" resultType="String">
+        select H.homework_path from homework H where H.homework_name=#{homeworkName}
+    </select>
+
+    <insert id="insertHomework" parameterType="com.classroom.entity.Homework">
+        INSERT INTO homework
+        (student_number,classroom_id,homework_path,homework_type,homework_name)
+        VALUES
+        (#{studentNumber},#{classroomId},#{homeworkPath},#{homeworkType},#{homeworkName})
+    </insert>
+    <update id="updateHomework">
+        update homework set homework_grade=#{homeworkGrade} where homework_name=#{homeworkName}
+    </update>
+
+    <delete id="deleteHomework" parameterType="String">
+        UPDATE homework SET deleted=1 where homework_name=#{homeworkName}
+    </delete>
+
+</mapper>
+
+
