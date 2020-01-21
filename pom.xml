@@ -11,7 +11,7 @@
 
   <properties>
     <!-- spring版本号 -->
-    <spring.version>5.1.5.RELEASE</spring.version>
+    <spring.version>5.2.3.RELEASE</spring.version>
     <!--jackson版本号-->
     <jackson.version>2.9.9</jackson.version>
 
@@ -237,7 +237,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
-      <version>4.3.2.RELEASE</version>
+      <version>5.2.3.RELEASE</version>
     </dependency>
     <!--其他需要的包-->
     <dependency>
