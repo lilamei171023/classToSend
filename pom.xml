@@ -13,7 +13,7 @@
     <!-- spring版本号 -->
     <spring.version>5.1.5.RELEASE</spring.version>
     <!--jackson版本号-->
-    <jackson.version>2.9.9</jackson.version>
+    <jackson.version>2.10.3</jackson.version>
 
     <aspectj.version>1.8.9</aspectj.version>
     <springframework.version>4.3.2.RELEASE</springframework.version>
